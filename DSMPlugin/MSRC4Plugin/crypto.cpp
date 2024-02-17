@@ -1,7 +1,8 @@
+/////////////////////////////////////////////////////////////////////////////
+//  Copyright (C) 2002-2024 UltraVNC Team Members. All Rights Reserved.
 //  Copyright (C) 2005 Sean E. Covel All Rights Reserved.
 //
-//  Created by Sean E. Covel
-//
+//  Created by Sean E. Covel based on UltraVNC's excellent TestPlugin project.
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -18,18 +19,15 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
 //  USA.
 //
-// If the source code for the program is not available from the place from
-// which you received this file, check 
-// http://home.comcast.net/~msrc4plugin
-// or
-// mail: msrc4plugin@comcast.net
+//  If the source code for the program is not available from the place from
+//  which you received this file, check
+//  https://uvnc.com/
 //
-//
-//
-/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
 
 //#include "stdafx.h"
-#define _WIN32_WINNT 0x0410     //must be defined for the crypto api
+#define _WIN32_WINNT 0x0410     // must be defined for the crypto api
 #define _WIN32_WINDOWS 0x0410
 #define WINVER 0x0400
 
@@ -39,14 +37,14 @@
 //#include <tchar.h>
 
 
-#include <wincrypt.h>       //windows crypto api
+#include <wincrypt.h>       // windows crypto api
 #include "crypto.h"
 #ifdef _WITH_LOG  
 	#include "logging.h"
 #endif  
 #include "utils.h"
 
-int CSP_PROV =	PROV_RSA_FULL;	//Microsoft Basic/Enhanced provider
+int CSP_PROV =	PROV_RSA_FULL;	// Microsoft Basic/Enhanced provider
 char DEFAULTKEY[KEYSize];
 
 CHAR szUserName[100];         // Buffer to hold the name of the key container.
@@ -56,20 +54,20 @@ DWORD dwUserNameLen = 100;    // Length of the buffer.
 char CSP_NAME[CSP_SIZE];
 
 DWORD VERIFY_CONTEXT_FLAG = CRYPT_VERIFYCONTEXT;
-DWORD MACHINE_CONTEXT_FLAG = CRYPT_MACHINE_KEYSET;	//Test for Win98 winvnc problem
+DWORD MACHINE_CONTEXT_FLAG = CRYPT_MACHINE_KEYSET;	// Test for UltraVNC Server Win98 problem
 DWORD NULL_CONTEXT_FLAG = 0;
 DWORD CONTEXT_FLAG = CRYPT_VERIFYCONTEXT;
 
 DWORD KEYLEN = KEYLEN_128BIT;
-DWORD MAXKEYLEN = KEYLEN_128BIT;	//I'm going to do something with this some day...
+DWORD MAXKEYLEN = KEYLEN_128BIT;	// I'm going to do something with this some day...
 
 
 BOOL GenKey(char * sDefaultGenKey, DWORD keyLen)
 {
 	
-    //Generates the RC4 key and writes it to a file
-    //The key contains information about the algorithm used and
-    //the key length.
+    // Generates the RC4 key and writes it to a file
+    // The key contains information about the algorithm used and
+    // the key length.
     char GkeyFile[KEYFILENAME_SIZE];
 	
     const int IN_BUFFER_SIZE    = 2048;
@@ -109,7 +107,7 @@ BOOL GenKey(char * sDefaultGenKey, DWORD keyLen)
 #endif
     
 
-	//Windows OS before 2000 won't import ExponentOfOne key in a verify context.
+	// Windows OS before Windows 2000 won't import ExponentOfOne key in a verify context.
 	if (iWinVer >= WIN2000)
 	{
 #ifdef _WITH_LOG  
@@ -222,24 +220,24 @@ BOOL GenKey(char * sDefaultGenKey, DWORD keyLen)
 	if (KEYLEN == 0x00800000)
 	{
 #ifdef _WITH_LOG  
-		DebugLog((DEST,"128 bit key."));
+		DebugLog((DEST,"128-bit key."));
 #endif  
-		WriteFile(hGKeyFile, "128 bit", 7, &dwBytesWritten, NULL);
+		WriteFile(hGKeyFile, "128-bit", 7, &dwBytesWritten, NULL);
 	}
 	else {
 			if (KEYLEN == 0x00380000)
 			{
 #ifdef _WITH_LOG  
-				DebugLog((DEST,"56 bit key."));
+				DebugLog((DEST,"56-bit key."));
 #endif  
-				WriteFile(hGKeyFile, " 56 bit", 7, &dwBytesWritten, NULL);
+				WriteFile(hGKeyFile, " 56-bit", 7, &dwBytesWritten, NULL);
 			}
 			else
 			{
 #ifdef _WITH_LOG  
-				DebugLog((DEST,"40 bit key."));
+				DebugLog((DEST,"40-bit key."));
 #endif  
-				WriteFile(hGKeyFile, " 40 bit", 7, &dwBytesWritten, NULL);
+				WriteFile(hGKeyFile, " 40-bit", 7, &dwBytesWritten, NULL);
 			}
 	}
 
@@ -368,13 +366,13 @@ HCRYPTPROV    hProvider = 0;                // crypto provider
 	{
 		//Version 2 has better features, but we don't want to waste a lot of time...
 
-		if (*iWinVer>= WINXP) {	//XP and up come with 128bit out of the box.
+		if (*iWinVer>= WINXP) {	//XP and up come with 128-bit out of the box.
 			szCSPName[0] = '\0';	//default
 			*iMaxKey = KEYLEN_128BIT;
 		}
 		else {	
 			
-			if (*iWinVer == WINNT) {  //NT does not support GetDefaultProvider function...
+			if (*iWinVer == WINNT) {  // Windows NT does not support GetDefaultProvider function...
 				//look for MS_ENHANCED_PROV
 
 #ifdef _WITH_LOG  
@@ -391,7 +389,7 @@ HCRYPTPROV    hProvider = 0;                // crypto provider
 				}
 			   CryptReleaseContext(hProvider, 0);
 			}
-			else {	//98, 98SE, ME, 2000
+			else {	// Windows 98, Windows 98SE, Windows ME, Windows 2000
 				//We gotta look and see what we have available...
 				//I was going to use GetDefaultProvider, but it returns MS Base Provider
 				//Even when the Enhanced provider is available...
@@ -438,7 +436,7 @@ int PrepContext(int iWinVer, HCRYPTKEY * hProvider)
 #ifdef _WITH_LOG  
 		PrintLog((DEST,"PrepContext"));
 #endif 
-	//Windows OS before 2000 won't import ExponentOfOne key in a verify context.
+	// Windows OS before Windows 2000 won't import ExponentOfOne key in a verify context.
 	if (iWinVer >= WIN2000)
 	{
 #ifdef _WITH_LOG  
@@ -644,14 +642,14 @@ int GetKeyLen(HCRYPTKEY hKey)
 			{
 				keyLen = 128;
 #ifdef _WITH_LOG  
-				PrintLog((DEST,"Imported Key is 128bit"));
+				PrintLog((DEST,"Imported Key is 128-bit"));
 #endif  
 			}
 			if (strcmp(pKeyLN,"28")==0)
 			{
 				keyLen = 40;
 #ifdef _WITH_LOG  
-				PrintLog((DEST,"Imported Key is 40bit"));
+				PrintLog((DEST,"Imported Key is 40-bit"));
 #endif 
 			}
 
@@ -659,7 +657,7 @@ int GetKeyLen(HCRYPTKEY hKey)
 			{
 				keyLen = 56;
 #ifdef _WITH_LOG  
-				PrintLog((DEST,"Imported Key is 56bit"));
+				PrintLog((DEST,"Imported Key is 56-bit"));
 #endif 
 			}
 

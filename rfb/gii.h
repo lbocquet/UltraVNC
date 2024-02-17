@@ -1,3 +1,28 @@
+/////////////////////////////////////////////////////////////////////////////
+//  Copyright (C) 2002-2024 UltraVNC Team Members. All Rights Reserved.
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+//  USA.
+//
+//  If the source code for the program is not available from the place from
+//  which you received this file, check
+//  https://uvnc.com/
+//
+////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef GII_H
 #define GII_H
 /*
@@ -196,10 +221,10 @@ typedef struct {
 
 // Reserverd   0x40000-0x100
 #define FORMAT_0_flag 0x0
-#define LANGE_16_flag 0x10 //16bit signed für x gefolgt von 16bit signed für y gemeinsam in einem DWORD
-#define LANGE_32_flag 0x20 //32bit signed für x gefolgt von 32bit signed für y in jeweils einem DWORD
-#define LANGE_64_flag 0x30 //64bit signed für x gefolgt von 64bit signed für y in jeweils 2 DWORD
-#define IDFORMAT_32  0x1 //32bit ID
+#define LANGE_16_flag 0x10 //16-bit signed für x gefolgt von 16-bit signed für y gemeinsam in einem DWORD
+#define LANGE_32_flag 0x20 //32-bit signed für x gefolgt von 32-bit signed für y in jeweils einem DWORD
+#define LANGE_64_flag 0x30 //64-bit signed für x gefolgt von 64-bit signed für y in jeweils 2 DWORD
+#define IDFORMAT_32  0x1 //32-bit ID
 #define IDFORMAT_CLEAR 0xF // No more touch points
 
 // just define else we need increase the winver setting
