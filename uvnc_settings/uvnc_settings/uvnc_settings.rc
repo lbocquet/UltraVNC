@@ -1,4 +1,6 @@
-// Microsoft Visual C++ generated resource script.
+// Microsoft Developer Studio generated resource script.
+// encoding: UTF8
+#pragma code_page(65001) // UTF-8
 //
 #include "resource.h"
 
@@ -321,7 +323,7 @@ END
 IDD_ABOUTBOX DIALOG 22, 17, 230, 75
 STYLE DS_SETFONT | DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
 CAPTION "UltraVNC uvnc_settings - About"
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     ICON            107,IDC_MYICON,14,9,16,16
     LTEXT           "UltraVNC uvnc_settings 2024",IDC_STATIC,49,10,119,8,SS_NOPREFIX
